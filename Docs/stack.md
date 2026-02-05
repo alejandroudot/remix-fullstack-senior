@@ -300,8 +300,6 @@
 
 ---
 
-Si querés, después armamos un `DOCS.md` en el repo con esta misma lista, pero más cruda (nombre → link → “para qué lo usamos”), así la tenés versionada dentro del proyecto.
-
 [1]: https://reactrouter.com/?utm_source=chatgpt.com "React Router Official Documentation"
 [2]: https://reactrouter.com/start/framework/data-loading?utm_source=chatgpt.com "Data Loading"
 [3]: https://reactrouter.com/start/framework/actions?utm_source=chatgpt.com "Actions"
