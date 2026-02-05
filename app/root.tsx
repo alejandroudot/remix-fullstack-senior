@@ -23,6 +23,16 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+export const meta: Route.MetaFunction = () => {
+  return [
+    { title: 'FeatureLab – Tasks & Feature Flags' },
+    {
+      name: 'description',
+      content: 'Dashboard fullstack para gestionar tasks y feature flags.',
+    },
+  ];
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
