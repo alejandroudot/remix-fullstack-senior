@@ -8,6 +8,6 @@ export type Task = {
   description?: string | null;
   status: TaskStatus;
   priority: TaskPriority;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date
+  updatedAt: Date;
 };

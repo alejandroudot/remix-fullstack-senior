@@ -1,28 +1,16 @@
 // app/infra/db/schema.ts
-import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { sql } from 'drizzle-orm';
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
-export const tasks = sqliteTable('tasks', {
-  id: text('id')
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-
-  title: text('title').notNull(),
-  description: text('description'),
-
-  status: text('status')
+export const tasks = sqliteTable("tasks", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  status: text("status", { enum: ["todo", "in-progress", "done"] })
     .notNull()
-    .default('todo'), // 'todo' | 'in-progress' | 'done'
-
-  priority: text('priority')
+    .default("todo"),
+  priority: text("priority", { enum: ["low", "medium", "high"] })
     .notNull()
-    .default('medium'), // 'low' | 'medium' | 'high'
-
-  createdAt: text('created_at')
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
-
-  updatedAt: text('updated_at')
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+    .default("medium"),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
 });

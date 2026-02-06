@@ -1,5 +1,5 @@
 // app/infra/tasks/task.repository.sqlite.ts
-import { eq } from 'drizzle-orm';
+import { desc, sql } from 'drizzle-orm';
 import type { TaskRepository, TaskInput } from '../../core/tasks/tasks.port';
 import type { Task } from '../../core/tasks/tasks.types';
 import { db } from '../db/client.sqlite';
@@ -7,9 +7,8 @@ import { tasks } from '../db/schema';
 
 export const sqliteTaskRepository: TaskRepository = {
   async listAll(): Promise<Task[]> {
-    const rows = await db.select().from(tasks).orderBy(tasks.createdAt);
+    const rows = db.select().from(tasks).orderBy(desc(tasks.createdAt)).all();
 
-    // Drizzle ya tipa bien los rows, pero los “casteamos” a nuestro tipo de dominio
     return rows.map((row) => ({
       id: row.id,
       title: row.title,
@@ -22,19 +21,19 @@ export const sqliteTaskRepository: TaskRepository = {
   },
 
   async create(input: TaskInput): Promise<Task> {
-    const now = new Date().toISOString();
-
-    const [row] = await db
+    const [row] = db
       .insert(tasks)
       .values({
+        id: crypto.randomUUID(),
         title: input.title,
         description: input.description ?? null,
-        status: 'todo', // default inicial
+        status: 'todo',
         priority: 'medium',
-        createdAt: now,
-        updatedAt: now,
+        createdAt: sql`CURRENT_TIMESTAMP`,
+        updatedAt: sql`CURRENT_TIMESTAMP`,
       })
-      .returning();
+      .returning()
+      .all();
 
     return {
       id: row.id,

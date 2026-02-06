@@ -1,8 +1,19 @@
 import { z } from 'zod';
 
-export const taskSchema = z.object({
-  title: z.string().min(1, 'El título es obligatorio'),
-  description: z.string().max(500, 'Máximo 500 caracteres').optional(),
-});
+export const taskCreateSchema = z
+  .object({
+    title: z.preprocess(
+      (v) => (typeof v === 'string' ? v.trim() : ''),
+      z.string().min(1, 'El título es obligatorio')
+    ),
+    description: z.preprocess(
+      (v) => (typeof v === 'string' ? v.trim() : ''),
+      z.string().optional()
+    ),
+  })
+  .transform((data) => ({
+    title: data.title,
+    description: data.description?.length ? data.description : undefined,
+  }));
 
-export type TaskInput = z.infer<typeof taskSchema>;
+export type TaskCreateInput = z.infer<typeof taskCreateSchema>;
